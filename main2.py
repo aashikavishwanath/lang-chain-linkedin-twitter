@@ -10,14 +10,15 @@ from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
 import os
 
-openai_api_key = "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"
 
+openai_api_key = os.environ.get("OPENAI_API_KEY")
+print('openai_api_key', openai_api_key)
 
 def scrape_linkedin_profile(linkedin_profile_url: str):
     """scrape information from LinkedIn profiles,
     Manually scrape the information from the LinkedIn profile"""
     api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
-    api_key = 'L4bt3qNzw1E_MOE_wES2KA'
+    api_key = os.environ.get("PROXYCURL_API_KEY")
     header_dic = {'Authorization': 'Bearer ' + api_key}
     params = {
         'url': linkedin_profile_url,
@@ -25,6 +26,7 @@ def scrape_linkedin_profile(linkedin_profile_url: str):
     response = requests.get(api_endpoint,
                             params=params,
                             headers=header_dic)
+    print('response.text:', response.text)
     data = response.json()
     data = {
         k: v
@@ -47,8 +49,8 @@ def scrape_twitter_profile(twitter_string: str):
     querystring = {"q":twitter_string}
 
     headers = {
-      "X-RapidAPI-Key": "97a9e76611msh30c921e4a55585fp100c41jsn69ea57fb6311",
-      "X-RapidAPI-Host": "twitter135.p.rapidapi.com"
+      "X-RapidAPI-Key": os.environ.get("X-RAPIDAPI-KEY"),
+      "X-RapidAPI-Host": os.environ.get("X-RAPIDAPI-HOST")
     }
 
     response = requests.get(url, headers=headers, params=querystring)
@@ -60,8 +62,8 @@ def scrape_twitter_profile(twitter_string: str):
     querystring2 = {"id":id_string,"count":"5"}
 
     headers2 = {
-      "X-RapidAPI-Key": "97a9e76611msh30c921e4a55585fp100c41jsn69ea57fb6311",
-      "X-RapidAPI-Host": "twitter135.p.rapidapi.com"
+      "X-RapidAPI-Key": os.environ.get("X-RAPIDAPI-KEY"),
+      "X-RapidAPI-Host": os.environ.get("X-RAPIDAPI-HOST")
     }
 
     response2 = requests.get(url2, headers=headers2, params=querystring2)
@@ -123,7 +125,7 @@ class CustomSerpAPIWrapper(SerpAPIWrapper):
 
 def get_profile_url(name: str):
     """Searches for Linkedin or twitter Profile Page."""
-    key = "bb41233945f1e09a9ee1a24f09ea1502f5b0c261abace05aa84915dd0ac4cd03"
+    key = os.environ.get("SERP_API_KEY")
     search = CustomSerpAPIWrapper(api_key=key)
     res = search.run(f"{name}")
     return res
@@ -195,5 +197,6 @@ def do_task(name: str):
 
 
 if __name__ == '__main__':
+
     do_task("harrison chase")
 

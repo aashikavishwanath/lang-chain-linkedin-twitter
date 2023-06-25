@@ -30,6 +30,11 @@ h1 {
     margin-bottom: 20px;
 }
 
+#ice {
+    width: 100px;
+    transform: translateY(17px);
+}
+
 input[type="text"] {
     width: 100%;
     padding: 12px 20px;
